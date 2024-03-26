@@ -1,3 +1,5 @@
+import kotlin.system.exitProcess
+
 fun newPlayer(): Player {
     println("Gib bitte deinen Namen ein:")
     var name = readln()
@@ -26,7 +28,8 @@ fun hauptMenue(player: Player) {
             "1" -> {
                 println("Du hast \"Wer wird Millionär\" ausgewählt.")
                 loadingGame()
-                werWirdMillionaer(player)
+                var wwm = WWM()
+                wwm.startGame(player)
                 break
             }
 
@@ -41,6 +44,7 @@ fun hauptMenue(player: Player) {
                 //Wordmix()
                 break
             }
+            "4", "stop", "abbruch", "cancel" -> exitProcess(0)
             else -> println("Ungültige Eingabe, probiere es erneut:")
         }
     }
@@ -55,24 +59,3 @@ fun loadingGame() {
     println()
 }
 
-val easyQuestions = multipleChoiceQuestions.filter { it.difficulty == "easy" }.toMutableList()
-val mediumQuestions = multipleChoiceQuestions.filter { it.difficulty == "medium" }.toMutableList()
-val strongQuestions = multipleChoiceQuestions.filter { it.difficulty == "strong" }.toMutableList()
-fun newQuestion(round: Int): MultipleChoiceQuestion {
-    var question: MultipleChoiceQuestion
-    when {
-        round < 5 -> {
-            question = easyQuestions.random()
-            easyQuestions.remove(question)
-        }
-        round < 10 -> {
-            question = mediumQuestions.random()
-            mediumQuestions.remove(question)
-        }
-        else -> {
-            question = strongQuestions.random()
-            strongQuestions.remove(question)
-        }
-    }
-    return question
-}
