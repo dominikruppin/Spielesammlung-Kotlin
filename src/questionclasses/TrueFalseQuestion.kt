@@ -1,3 +1,5 @@
+package questionclasses
+
 class TrueFalseQuestion(
         question: String,
         difficulty: String,

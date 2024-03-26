@@ -1,7 +1,12 @@
-import kotlin.system.exitProcess
+package gameclasses
+
+import Player
+import hauptMenue
+import jokerclasses.*
+import questionclasses.*
 
 class WWM(name: String = "Wer wird Millionär"): Game(name) {
-    val joker = mutableListOf<String>()
+    val joker = mutableListOf<Joker>()
     var round = 0
     var risiko = false
     var easyQuestions: MutableList<MultipleChoiceQuestion>
@@ -9,7 +14,7 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
     var strongQuestions: MutableList<MultipleChoiceQuestion>
 
     init {
-        this.joker.addAll(listOf("50/50", "Publikumsjoker", "Telefonjoker"))
+        this.joker.addAll(listOf(FiftyFiftyJoker()))
         this.easyQuestions = multipleChoiceQuestions.filter { it.difficulty == "easy" }.toMutableList()
         this.mediumQuestions = multipleChoiceQuestions.filter { it.difficulty == "medium" }.toMutableList()
         this.strongQuestions = multipleChoiceQuestions.filter { it.difficulty == "strong" }.toMutableList()
@@ -43,15 +48,15 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
                     println("""
                         |"Wer wird Millionär" ist ein Quizspiel, bei dem Kandidaten Fragen aus verschiedenen Wissensbereichen beantworten müssen, um Geldpreise zu gewinnen. 
                         |Die Fragen werden in aufsteigender Schwierigkeit gestellt, wobei jeder Frage ein höherer Geldbetrag zugeordnet ist, bis hin zur Million. 
-                        |Der Kandidat hat vier Joker, die ihm helfen können:
+                        |Der Kandidat hat vier jokerclasses.Joker, die ihm helfen können:
                         |
                         |- Publikumsjoker: Der Kandidat fragt das Publikum nach ihrer Meinung, welche Antwort richtig ist.
                         |
                         |- Telefonjoker: Der Kandidat darf eine Person seiner Wahl anrufen und um Hilfe bei der Beantwortung der Frage bitten.
                         |
-                        |- 50:50-Joker: Zwei falsche Antworten werden eliminiert, sodass dem Kandidaten nur noch zwei Antwortmöglichkeiten bleiben.
+                        |- 50:50-jokerclasses.Joker: Zwei falsche Antworten werden eliminiert, sodass dem Kandidaten nur noch zwei Antwortmöglichkeiten bleiben.
                         |
-                        |- Zusatzjoker: Du kannst die Absicherung bei 16.000€ gegen einen Joker tauschen. Es stehen Leute aus dem Publikum auf, welche 
+                        |- Zusatzjoker: Du kannst die Absicherung bei 16.000€ gegen einen jokerclasses.Joker tauschen. Es stehen Leute aus dem Publikum auf, welche 
                         |denken, dass sie die Lösung kennen.
                         |
                         |Um einen Joker zu nutzen, gib statt der Lösung der Frage einfach das Wort "Joker" ein.
@@ -85,7 +90,7 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
             when (readln()) {
                 "1" -> {
                     println("Du hast den Risikomodus gewählt und erhältst einen Zusatzjoker.")
-                    this.joker.add("Zusatzjoker")
+                    // this.joker.add("Zusatzjoker")
                     break
                 }
 
@@ -103,11 +108,11 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
         while (true) {
             var question = this.newQuestion(this.round)
             question.getQuestion(player, this)
-            var answer = question.chooseSolution(player, this)
+            var answer = question.chooseSolution(player, this, question)
             if (answer == -1) { // Beim negativen Wert wurde ein Joker genutzt, daher überspringen wir die weitere Auswertung
                 println("Es wurde ein Joker genutzt.") // SPÄTER ENTFERNEN
                 this.round++
-                exitProcess(0) // SPÄTER GEGEN CONTINUE AUSTAUSCHEN
+                continue // SPÄTER GEGEN CONTINUE AUSTAUSCHEN
             }
             println("Deine Antwort wurde eingeloggt...\n")
             question.getQuestionLoggedIn(answer)
@@ -140,6 +145,15 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
     }
 
     fun startGame(player: Player) {
+        println("\n" +
+                "                                                                                                         \n" +
+                "__        _______ ____   __        _____ ____  ____    __  __ ___ _     _     ___ ___  _   _ _   _ ____  \n" +
+                "\\ \\      / | ____|  _ \\  \\ \\      / |_ _|  _ \\|  _ \\  |  \\/  |_ _| |   | |   |_ _/ _ \\| \\ | (_)_(_|  _ \\ \n" +
+                " \\ \\ /\\ / /|  _| | |_) |  \\ \\ /\\ / / | || |_) | | | | | |\\/| || || |   | |    | | | | |  \\| | /_\\ | |_) |\n" +
+                "  \\ V  V / | |___|  _ <    \\ V  V /  | ||  _ <| |_| | | |  | || || |___| |___ | | |_| | |\\  |/ _ \\|  _ < \n" +
+                "   \\_/\\_/  |_____|_| \\_\\    \\_/\\_/  |___|_| \\_|____/  |_|  |_|___|_____|_____|___\\___/|_| \\_/_/ \\_|_| \\_\\\n" +
+                "                                                                                                         \n")
+
         println("Willkommen bei Wer wird Millionär, ${player.name}!")
         this.gameRules()
         this.riskOrNot()
@@ -153,7 +167,7 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
 
     // Bis hier hin funktional. Es kann bereits ein Quiz gespielt werden.
     // TODO:
-    // - Alle Joker implementieren
+    // - Alle jokerclasses.Joker implementieren
     // - Sicherheitsstufen implementieren
 
 

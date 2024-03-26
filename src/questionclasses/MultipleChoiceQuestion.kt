@@ -1,3 +1,10 @@
+package questionclasses
+
+import Player
+import gameclasses.WWM
+import hauptMenue
+import jokerclasses.*
+
 class MultipleChoiceQuestion(
         question: String,
         difficulty: String,
@@ -46,84 +53,7 @@ class MultipleChoiceQuestion(
         }
     }
 
-    fun getJoker(player: Player, wwm: WWM) {
-        println("Du hast noch folgende Joker zur Verfügung:")
-        wwm.joker.forEachIndexed { index, joker ->
-            println("${index + 1}) $joker")
-        }
-        println("Wähle nun deinen Joker durch Eingabe der Zahl aus:")
-        var input: Int?
-        while (true) {
-            input = readln().toIntOrNull()
-            when {
-                input == null -> println("Ungültige Eingabe. Bitte nur die entsprechende Zahl eingeben. Probiere es erneut.")
-                !wwm.joker.indices.contains(input) -> println("Den Joker mit der Auswahl ${input + 1} gibt es nicht.")
-                else -> break
-            }
-        }
-
-        when (wwm.joker[input!! - 1]) {
-            "50/50" -> {
-                println("Du hast den 50/50 Joker ausgewählt.\nWir entfernen nun zwei falsche Antworten...")
-                val falseAnswers = (0 until this.options.size).filter { index -> index != this.answer }.shuffled().take(2)
-                println(this.question)
-                this.options.forEachIndexed { index, option ->
-                    val char = 'a' + index
-                    if (index in falseAnswers) {
-                        print("")
-                    } else {
-                        println("$char) $option")
-                    }
-                }
-                println("Durch die Eingabe von \"stop\" kannst du jederzeit aufhören.")
-                println("Bitte gib deine Lösung ein, du hast dafür maximal 60 Sekunden Zeit:")
-                var index = 0
-
-                do {
-                    while (true) {
-                        when (readln().lowercase()) {
-                            "a" -> {
-                                index = 0
-                                break
-                            }
-
-                            "b" -> {
-                                index = 1
-                                break
-                            }
-
-                            "c" -> {
-                                index = 2
-                                break
-                            }
-
-                            "d" -> {
-                                index = 3
-                                break
-                            }
-
-                            else -> println("Ungültige Eingabe")
-                        }
-                    }
-                    if (index in falseAnswers) {
-                        println("Du kannst keine Option wählen, die der Joker entfernt hat.")
-                    }
-                } while (index in falseAnswers)
-                wwm.joker.remove("50/50")
-
-
-                // TODO
-                // Abfrage implementieren. Eventuell Schleife ob die Auswahl okay ist, falls ja, returnen
-                return
-            }
-
-            "Telefonjoker" -> {} // TODO
-            "Publikumsjoker" -> {} // TODO
-            "Zusatzjoker" -> {} // TODO
-        }
-    }
-
-    fun chooseSolution(player: Player, wwm: WWM): Int {
+    fun chooseSolution(player: Player, wwm: WWM, question: MultipleChoiceQuestion): Int {
         var answer = 0
         println("Bitte gib deine Lösung ein, du hast dafür maximal 60 Sekunden Zeit:")
         while (true) {
@@ -153,14 +83,17 @@ class MultipleChoiceQuestion(
                         println("Du hast keine Joker mehr.")
                         continue
                     }
-                    this.getJoker(player, wwm)
-                    return -1 // Negativer Wert, wenn Joker genutzt wurde
+                    if (Joker().getJoker(player, wwm, question)) {
+                        return -1
+                    } else {
+                        continue
+                    }
                 }
 
                 "stop" -> {
                     println("Möchtest du wirklich aufhören und die %,d€ mitnehmen?".format(level[wwm.round]))
                     if (wwm.joker.size > 0) {
-                        println("Denk daran, du besitzt noch folgende Joker: ${wwm.joker}")
+                        println("Denk daran, du besitzt noch folgende jokerclasses.Joker: ${wwm.joker}")
                     }
                     while (true) {
                         println("1) Ja\n2) Nein")

@@ -34,12 +34,12 @@ Die Vorlage ist ein leeres Projekt in IntelliJ. Erstelle alle nötigen Dateien: 
 
 ### Informationen zu den Jokern:
 * Es gibt mindestens 2 Arten von Jokern, einige Ideen dafür:
-  * 50:50 Joker, eliminiert falsche Antworten
-  * ein Joker, der die richtige Antwort farbig markiert
-  * ein Joker, der die aktuelle Frage an einem anderen Spieler abgibt
-  * ein Joker, der eine Frage überspringen lässt um eine neue Frage zu erhalten
+  * 50:50 jokerclasses.Joker, eliminiert falsche Antworten
+  * ein jokerclasses.Joker, der die richtige Antwort farbig markiert
+  * ein jokerclasses.Joker, der die aktuelle Frage an einem anderen Spieler abgibt
+  * ein jokerclasses.Joker, der eine Frage überspringen lässt um eine neue Frage zu erhalten
   * ...
-* Jeder Joker kann nur einmal verwendet werden. Alternativ kannst du hier aber auch ein anderes System entwickeln.
+* Jeder jokerclasses.Joker kann nur einmal verwendet werden. Alternativ kannst du hier aber auch ein anderes System entwickeln.
 * Beim Quizstart erhält jeder Spieler die selbe Anzahl an Jokern
 
 ### Informationen zum Quiz
@@ -61,5 +61,5 @@ Einige Ideen zur Erweiterung:
 
 
 * Du könntest Teams von Spielern gemeinsam spielen lassen. Überlege dir selbst, wie du die Regeln dafür anpassen müsstest. 
-* Weitere Joker oder Fragentypen sind immer gerne gesehen.
+* Weitere jokerclasses.Joker oder Fragentypen sind immer gerne gesehen.
 * ...

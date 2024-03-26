@@ -1,3 +1,4 @@
+import gameclasses.WWM
 import kotlin.system.exitProcess
 
 fun newPlayer(): Player {
@@ -56,6 +57,10 @@ fun loadingGame() {
         Thread.sleep(500)
         print(".")
     }
-    println()
+    clearConsole()
+}
+
+fun clearConsole() {
+    println("\n".repeat(100))
 }
 
