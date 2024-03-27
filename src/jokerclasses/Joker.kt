@@ -1,6 +1,6 @@
 package jokerclasses
 
-import Player
+import classes.Player
 import gameclasses.WWM
 import questionclasses.MultipleChoiceQuestion
 
@@ -32,8 +32,20 @@ open class Joker(val name: String = "Joker") {
             is FiftyFiftyJoker -> {
                 val fiftyFiftyJoker = wwm.joker[input - 1] as FiftyFiftyJoker
                 fiftyFiftyJoker.use(question)
+                wwm.joker.remove(fiftyFiftyJoker)
+                return true
+            }
+            is Telefonjoker -> {
+                val telefonjoker = wwm.joker[input -1] as Telefonjoker
+                telefonjoker.use(wwm, player, question)
+                wwm.joker.remove(telefonjoker)
+            }
+            is Publikumsjoker -> {
+                val publikumsjoker = wwm.joker[input -1] as Publikumsjoker
+                publikumsjoker.use(player, wwm, question)
+                wwm.joker.remove(publikumsjoker)
             }
         }
-        return true
+        return false
     }
 }

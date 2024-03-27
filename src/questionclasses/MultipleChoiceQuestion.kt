@@ -1,6 +1,6 @@
 package questionclasses
 
-import Player
+import classes.Player
 import gameclasses.WWM
 import hauptMenue
 import jokerclasses.*

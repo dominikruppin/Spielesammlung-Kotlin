@@ -1,4 +1,4 @@
-import kotlin.random.Random
+package classes
 
 class Names {
     private val names = listOf(

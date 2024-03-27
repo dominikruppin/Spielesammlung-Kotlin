@@ -1,5 +1,10 @@
+import classes.Player
 import gameclasses.WWM
 import kotlin.system.exitProcess
+import javax.sound.sampled.AudioInputStream
+import javax.sound.sampled.AudioSystem
+import javax.sound.sampled.Clip
+import java.io.File
 
 fun newPlayer(): Player {
     println("Gib bitte deinen Namen ein:")
@@ -64,3 +69,15 @@ fun clearConsole() {
     println("\n".repeat(100))
 }
 
+fun playSound(soundFile: String) {
+    try {
+        val audioInputStream: AudioInputStream = AudioSystem.getAudioInputStream(File(soundFile))
+        val clip: Clip = AudioSystem.getClip()
+        clip.open(audioInputStream)
+        clip.start()
+        // Der Sound wird asynchron abgespielt, daher warten wir hier, bis er beendet ist
+        Thread.sleep(clip.microsecondLength / 1000) // In Millisekunden umwandeln
+    } catch (ex: Exception) {
+        println("Fehler beim Abspielen der Audiodatei: $ex")
+    }
+}
