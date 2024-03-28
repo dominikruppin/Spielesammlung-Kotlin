@@ -45,6 +45,11 @@ open class Joker(val name: String = "Joker") {
                 publikumsjoker.use(player, wwm, question)
                 wwm.joker.remove(publikumsjoker)
             }
+            is Zusatzjoker -> {
+                val zusatzjoker = wwm.joker[input -1] as Zusatzjoker
+                zusatzjoker.use(wwm, player, question)
+                wwm.joker.remove(zusatzjoker)
+            }
         }
         return false
     }

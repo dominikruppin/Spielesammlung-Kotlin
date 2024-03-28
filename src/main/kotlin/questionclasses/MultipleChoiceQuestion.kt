@@ -519,4 +519,3 @@ val multipleChoiceQuestions = listOf(
                 difficulty = "easy"
         )
 )
-val truefalseQuestions: List<TrueFalseQuestion> = listOf()

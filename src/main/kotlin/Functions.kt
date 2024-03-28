@@ -18,6 +18,12 @@ fun newPlayer(): Player {
         println("Ungültige Eingabe. Gib nur Zahlen ein. Probiere es erneut:")
         age = readln()
     }
+
+    if (age.toInt() < 12) {
+        println("Leider darfst du erst ab 12 Jahren spielen.\nDas Spiel wird nun beendet.")
+        exitProcess(0)
+    }
+
     return Player(name, age.toInt())
 }
 
@@ -33,7 +39,7 @@ fun hauptMenue(player: Player) {
             "1" -> {
                 println("Du hast \"Wer wird Millionär\" ausgewählt.")
                 loadingGame()
-                var wwm = WWM()
+                val wwm = WWM()
                 wwm.startGame(player)
                 break
             }
@@ -68,13 +74,12 @@ fun clearConsole() {
     println("\n".repeat(100))
 }
 
-fun playSound(soundFile: String) {
+fun playSound(soundFile: String): Clip {
         // Wir holen uns den Pfad zur übergebenen Datei (soundFile)
         val resource = object {}.javaClass.getResourceAsStream("/$soundFile")
         // Prüfen ob der Pfad gefunden wurde
         if (resource == null) {
             println("Die Datei $soundFile wurde nicht gefunden.")
-            return
         }
 
         // Es wird aus dem übergebenen Dateipfad ein AudioInputStream erstellt
@@ -85,4 +90,14 @@ fun playSound(soundFile: String) {
         clip.open(audioInputStream)
         // Der Clip (also die importierte Audiodatei) wird nun abgespielt.
         clip.start()
+
+        return clip
+}
+
+fun formatMiliseconds(difference: Long): String {
+    val minutes = (difference / 60000).toInt()
+    val seconds = ((difference % 60000) / 1000).toInt()
+    val milliseconds = (difference % 1000).toInt()
+
+    return "%02d:%02d.%03d".format(minutes, seconds, milliseconds)
 }
