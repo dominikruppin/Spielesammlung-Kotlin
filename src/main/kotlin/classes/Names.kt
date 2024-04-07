@@ -1,5 +1,9 @@
 package classes
 
+/**
+ * Die Klasse names repräsentiert einfach nur Namen. Sie beinhaltet eine Namensliste
+ * und eine Funktion um einen zufälligen Namen als String zurück zu geben.
+ */
 class Names {
     private val names = listOf(
             "Emma", "Liam", "Olivia", "Noah", "Ava", "Oliver", "Isabella", "William", "Sophia", "Elijah",
@@ -9,6 +13,11 @@ class Names {
             "Grace", "Wyatt", "Chloe", "John", "Camila", "Jack", "Penelope", "Luke", "Riley"
     )
 
+    /**
+     * Aus einer Liste von Namen wird ein zufälliger ausgewählt.
+     *
+     * @return Den zufällig gewählten Namen als String.
+     */
     fun generateRandomName(): String {
         return names.random()
     }

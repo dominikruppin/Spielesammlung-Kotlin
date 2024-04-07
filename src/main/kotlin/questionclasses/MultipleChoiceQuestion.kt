@@ -4,6 +4,8 @@ import classes.Player
 import gameclasses.WWM
 import hauptMenue
 import jokerclasses.*
+import kotlin.concurrent.thread
+import kotlin.system.exitProcess
 
 class MultipleChoiceQuestion(
         question: String,
@@ -12,7 +14,15 @@ class MultipleChoiceQuestion(
         var answer: Int
 ): Question(question, difficulty) {
 
+    // Die Gewinnsummen von Wer Wird Millionär (Frage 1: 50€, Frage 2: 100€ usw...)
     private val level = listOf(50, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 500000, 1000000)
+
+    /**
+     * Zeigt die Frage und die Antwortoptionen für die Instanz einer Frage an.
+     *
+     * @param player Der aktuelle Spieler.
+     * @param wwm Die Instanz des "Wer wird Millionär"-Spiels, die Informationen zur aktuellen Runde enthält.
+     */
     fun getQuestion(player: Player, wwm: WWM) {
         println("Frage ${wwm.round + 1} für %,d€:".format(level[wwm.round]))
         println(this.question)
@@ -23,6 +33,12 @@ class MultipleChoiceQuestion(
         println("Durch die Eingabe von \"stop\" kannst du jederzeit aufhören.\nDurch die Eingabe von \"Joker\" kannst du deine Joker nutzen.")
     }
 
+    /**
+     * Zeigt die aktuelle Frage und die Antwortoptionen an, dabei ist die ausgewählte
+     * Antwort Gelb hinterlegt.
+     *
+     * @param choose Der Index der Antwortoption. Also die vom Spieler gewählte Antwortoption.
+     */
     fun getQuestionLoggedIn(choose: Int) {
         println(this.question)
         this.options.forEachIndexed { index, option ->
@@ -36,6 +52,12 @@ class MultipleChoiceQuestion(
         }
     }
 
+    /**
+     * Zeigt die Frage und die Antwortoptionen an. Dabei werden die richtige Lösung und falls
+     * falsch gewählte Option farblich markiert (mit grün und rot)
+     *
+     * @param choose Der Index der Antwortoption. Also die vom Spieler gewählte Antwortoption.
+     */
     fun getAnswer(choose: Int) {
         println(this.question)
         this.options.forEachIndexed { index, option ->
@@ -53,6 +75,18 @@ class MultipleChoiceQuestion(
         }
     }
 
+    /**
+     * Erlaubt dem Spieler, eine Lösung für die aktuelle Frage auszuwählen. Der Spieler kann entweder eine Antwort auswählen,
+     * einen Joker verwenden oder das Spiel beenden.
+     *
+     * @param player Der aktuelle Spieler.
+     * @param wwm Die Instanz des "Wer wird Millionär"-Spiels, die Informationen zur aktuellen Runde enthält.
+     * @param question Die MultipleChoice-Frage, für die der Spieler eine Lösung wählt.
+     *
+     * @return Die Indexnummer der ausgewählten Antwort oder -1, wenn ein Joker verwendet wurde oder das Spiel beendet wurde.
+     */
+
+    /*
     fun chooseSolution(player: Player, wwm: WWM, question: MultipleChoiceQuestion): Int {
         var answer = 0
         println("Bitte gib deine Lösung ein, du hast dafür maximal 60 Sekunden Zeit:")
@@ -91,15 +125,15 @@ class MultipleChoiceQuestion(
                 }
 
                 "stop" -> {
-                    println("Möchtest du wirklich aufhören und die %,d€ mitnehmen?".format(level[wwm.round]))
+                    println("Möchtest du wirklich aufhören und die %,d€ mitnehmen?".format(level[wwm.round-1]))
                     if (wwm.joker.size > 0) {
-                        println("Denk daran, du besitzt noch folgende jokerclasses.Joker: ${wwm.joker}")
+                        println("Denk daran, du besitzt noch folgende Joker: ${wwm.joker}")
                     }
                     while (true) {
                         println("1) Ja\n2) Nein")
                         when (readln().lowercase()) {
                             "1", "ja" -> {
-                                println("Weise Entscheidung, ich gratuliere dir zu den gewonnenen %,d€!".format(level[wwm.round]))
+                                println("Weise Entscheidung, ich gratuliere dir zu den gewonnenen %,d€!".format(level[wwm.round-1]))
                                 Thread.sleep(2000)
                                 println("Es geht gleich zurück ins Hauptmenü.")
                                 Thread.sleep(8000)
@@ -111,6 +145,74 @@ class MultipleChoiceQuestion(
                                 println("Ein Zocker wie ich sehe... machen wir weiter!")
                                 println("Bitte gib deine Antwort zur bereits gestellten Frage ein:")
                                 break
+                            }
+
+                            else -> println("Ungültige Eingabe, versuche es erneut:")
+                        }
+                    }
+                }
+
+                else -> println("Ungültige Eingabe, probiere es erneut:")
+            }
+        }
+        return answer
+    }
+} */
+
+    fun chooseSolution(player: Player, wwm: WWM, question: MultipleChoiceQuestion): Int {
+        var answer = 0
+        var userInput: String? = null
+
+        // Funktion zur Eingabeüberwachung mit Zeitlimit
+        val inputThread = thread(start = true) {
+            userInput = readln()
+        }
+
+        println("Bitte gib deine Lösung ein, du hast dafür maximal 60 Sekunden Zeit:")
+        inputThread.join(60000) // Warte maximal 60 Sekunden auf Benutzereingabe
+
+        if (inputThread.isAlive) { // Falls der Thread noch läuft (keine Eingabe innerhalb von 60 Sekunden)
+            println("Du hast innerhalb der Zeit keine Antwort gegeben, das Spiel ist vorbei.")
+            exitProcess(0)
+        } else { // Benutzereingabe innerhalb des Zeitlimits erhalten
+            when (userInput) {
+                "a" -> answer = 0
+                "b" -> answer = 1
+                "c" -> answer = 2
+                "d" -> answer = 3
+                "joker" -> {
+                    if (wwm.joker.size < 1) {
+                        println("Du hast keine Joker mehr.")
+                    } else {
+                        // getJoker returned einen Boolean. Bei true fand die Auswertung schon statt, bei false nicht
+                        if (Joker().getJoker(player, wwm, question)) {
+                            // Wenn die Auswertung schon war (true), dann returnen wir -1, damit wir das wissen
+                            return -1
+                        }
+                    }
+                }
+
+                "stop" -> {
+                    println("Möchtest du wirklich aufhören und die %,d€ mitnehmen?".format(level[wwm.round - 1]))
+                    if (wwm.joker.size > 0) {
+                        println("Denk daran, du besitzt noch folgende Joker: ${wwm.joker}")
+                    }
+                    while (true) {
+                        println("1) Ja\n2) Nein")
+                        when (readln().lowercase()) {
+                            "1", "ja" -> {
+                                println("Weise Entscheidung, ich gratuliere dir zu den gewonnenen %,d€!".format(level[wwm.round - 1]))
+                                Thread.sleep(2000)
+                                println("Es geht gleich zurück ins Hauptmenü.")
+                                Thread.sleep(8000)
+                                hauptMenue(player)
+                                return answer
+                            }
+
+                            "2", "nein" -> {
+                                println("Ein Zocker wie ich sehe... machen wir weiter!")
+                                println("Bitte gib deine Antwort zur bereits gestellten Frage ein:")
+                                return answer
                             }
 
                             else -> println("Ungültige Eingabe, versuche es erneut:")

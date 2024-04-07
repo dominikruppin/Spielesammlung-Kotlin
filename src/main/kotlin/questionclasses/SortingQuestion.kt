@@ -8,6 +8,11 @@ class SortingQuestion(
 ): Question(question, difficulty) {
 
         // Wenn wir es als companion object definieren, können wir ohne eine Instanz darauf zugreifen
+        /**
+         * Erzeugt eine neue Sortierungsfrage, die zufällig aus der Liste der verfügbaren Sortierungsfragen ausgewählt wird.
+         *
+         * @return Eine zufällig ausgewählte Sortierungsfrage.
+         */
         companion object {
                 fun getNewQuestion(): SortingQuestion {
                         return sortingQuestions.random()

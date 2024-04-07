@@ -2,13 +2,30 @@ package jokerclasses
 
 import questionclasses.MultipleChoiceQuestion
 
+/**
+ * Repräsentiert den 50/50 Joker.
+ * Beinhaltet die use Funktion, um den Joker zu nutzen
+ */
 class FiftyFiftyJoker(name: String = "50/50"): Joker(name) {
-     fun use(question: MultipleChoiceQuestion) {
+    /**
+     * Diese Funktion implementiert den 50/50 Joker für eine Multiple-Choice-Frage.
+     * Sie entfernt zwei falsche Antworten zufällig und ermöglicht dem Benutzer, eine Antwort auszuwählen.
+     * Die gewählte Antwort wird markiert und nach einer kurzen Verzögerung werden die korrekten und falschen Antworten angezeigt.
+     *
+     * @param question Die MultipleChoiceQuestion, für die der Joker angewendet wird.
+     */
+    fun use(question: MultipleChoiceQuestion) {
         println("Du hast den 50/50 Joker ausgewählt.\nWir entfernen nun zwei falsche Antworten...")
+         // Wir erstellen mit falseAnswers eine neue Liste mit den Indexen von falschen Antworten.
+         // Dazu nutzen wir den Index (0 until question.options.size)
+         // Der Filter entfernt die richtige Antwort aus den Optionen, so bleiben nur die falschen übrig
+         // Diese falschen Antworten werden gemischt und 2 davon genommen
+         // Am Ende sind in falseAnswers somit von 2 falsche Antworten der Index gespeichert
         val falseAnswers = (0 until question.options.size).filter { index -> index != question.answer }.shuffled().take(2)
         println(question.question)
         question.options.forEachIndexed { index, option ->
             val char = 'a' + index
+            // Wir prüfen ob der aktuelle index in falseAnswers gespeichert ist, falls ja printen wir einen leeren String (somit ist die Option quasi weg)
             if (index in falseAnswers) {
                 print("")
             } else {
@@ -50,7 +67,7 @@ class FiftyFiftyJoker(name: String = "50/50"): Joker(name) {
             }
         } while (chooseIndex in falseAnswers)
 
-        // EINLOGGEN:
+        // EINLOGGEN (Wir markieren die gewählte Option farblich in orange)
         println("\nDeine Antwort wurde eingeloggt...\n")
          println(question.question)
          question.options.forEachIndexed { index, option ->
@@ -68,6 +85,7 @@ class FiftyFiftyJoker(name: String = "50/50"): Joker(name) {
          println("\nSchauen wir mal, ob das so stimmt...\n")
          Thread.sleep(6000)
          println(question.question)
+         // Wir geben die Antworten aus und markieren dabei die richtige Antwort grün. Falls die falsche Antwort gewählt wurde, wechselt diese auf rot.
          question.options.forEachIndexed { index, option ->
              val char = 'a' + index
              val choosedOption = 'a' + chooseIndex

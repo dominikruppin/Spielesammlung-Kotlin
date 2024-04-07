@@ -9,18 +9,30 @@ import newPlayer
 import playSound
 import questionclasses.*
 
+/**
+ * Die Klasse WWM (Wer wird Millionär) repräsentiert die Instanz des Spiels.
+ * Die Klasse beinhaltet verschiedene Funktionen für den Spielablauf
+ */
 class WWM(name: String = "Wer wird Millionär"): Game(name) {
+    // Wir speichern hier die Joker als veränderliche Liste
     val joker = mutableListOf<Joker>()
+    // Die jeweilige Runde als Integer
     var round = 0
-    var risiko = false
-    var players = 1
+    // Wurde der Risikomodus genutzt oder nicht?
+    private var risiko = false
+    // Wir erstellen eine Liste mit der Schwierigkeit easy.
     private var easyQuestions: MutableList<MultipleChoiceQuestion>
+    // Wir erstellen eine Liste mit der Schwierigkeit easy.
     private var mediumQuestions: MutableList<MultipleChoiceQuestion>
+    // Wir erstellen eine Liste mit der Schwierigkeit easy.
     private var strongQuestions: MutableList<MultipleChoiceQuestion>
 
-    // Wir trennen die Fragen zwischen den Schwierigkeitsgraden, so können wir sund mit random leichter eine zufällige holen
+    // Wir trennen die Fragen zwischen den Schwierigkeitsgraden, so können wir uns mit random leichter eine zufällige holen
+    // Dabei werden die Fragen beim initialisieren des Objekts in die angelegten Listen hinzugefügt
     init {
+        // Wir fügen inital die Joker hinzu, die man anfangs IMMER hat (aber nur einmalig nutzen kann)
         this.joker.addAll(listOf(FiftyFiftyJoker(), Telefonjoker(), Publikumsjoker()))
+        // Wir filtern hier nach der Schwierigkeit und fügen hier in die entsprechende Liste ein. it entspricht dem jeweiligen Objekt vom Typ MultipleChoiceQuestions
         this.easyQuestions = multipleChoiceQuestions.filter { it.difficulty == "easy" }.toMutableList()
         this.mediumQuestions = multipleChoiceQuestions.filter { it.difficulty == "medium" }.toMutableList()
         this.strongQuestions = multipleChoiceQuestions.filter { it.difficulty == "strong" }.toMutableList()
@@ -127,14 +139,24 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
         }
     }
 
+    /**
+     * Führt den Ablauf für die nächste Frage im "Wer wird Millionär"-Spiel aus, einschließlich des Anzeigens der Frage,
+     * der Eingabe der Antwort durch den Spieler, der Überprüfung der Antwort und der entsprechenden Reaktionen.
+     *
+     * @param player Der Spieler, der die Frage beantwortet.
+     */
     private fun nextQuestion(player: Player) {
         while (true) {
+            // Wir holen uns eine zufällige Frage
             var question = this.newQuestion(this.round)
+            // Wir zeigen die Frage an
             question.getQuestion(player, this)
+            // Answer speichert den returned Wert (den Index der gegebenen Antwort)
             var answer = question.chooseSolution(player, this, question)
-            if (answer == -1) { // Beim negativen Wert wurde ein Joker genutzt, daher überspringen wir die weitere Auswertung
-                println("Es wurde ein Joker genutzt.") // SPÄTER ENTFERNEN
+            // Beim negativen Wert wurde der 50/50 Joker genutzt und es fand bereits eine Auswertung statt
+            if (answer == -1) {
                 this.round++
+                // Da die Auswertung bereits war, überspringen wir die weitere Auswertung und beginnen mit der nächsten Frage.
                 continue
             }
             println("Deine Antwort wurde eingeloggt...\n")
@@ -150,7 +172,7 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
                     hauptMenue(player)
                     return
                 }
-                println("\nDeine Antwort war richtig! Glückwunsch!\n")
+                println("\nDeine Antwort war richtig! Glückwunsch!")
                 Thread.sleep(3000)
                 println("\nKommen wir zur nächsten Frage.\n")
                 Thread.sleep(6000)
@@ -159,7 +181,7 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
             } else {
                 println("Deine Antwort war leider falsch...\n")
                 println("Die richtige Antwort wäre gewesen: ${question.options[question.answer]}")
-                if (round > 9 && !risiko) {
+                if (round > 9 && risiko) {
                     println("Du fällst auf deine letzte Sicherheitsstufe zurück und erhältst 16.000€!")
                 } else if (round > 4) {
                     println("Du fällst auf deine letzte Sicherheitsstufe zurück und erhältst 500€!")
@@ -173,6 +195,13 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
         }
     }
 
+    /**
+     * Der Spieler kann zwischen Einzelspieler und Mehrspieler wählen.
+     *
+     * @param player Der Spieler, der die Auswahl trifft.
+     * @return Der Spieler, der die Qualifizierungsrunde (handleMultiPlayer) gewonnen hat und somit das eigentliche
+     * Spiel nun bestreitet.
+     */
     private fun singleOrMultiPlayer(player: Player): Player {
         println("Wähle aus, ob Einzel oder Mehrspieler, ${player.name}:")
         println("1) Einzelspieler\n2) Mehrspieler\n")
@@ -190,6 +219,12 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
         }
     }
 
+    /**
+     * Private Funktion für den Mehrspielermodus im Spiel "Wer wird Millionär".
+     *
+     * @param player Der erste Spieler, der das Spiel gestartet hat.
+     * @return Der Gewinner des Mehrspielermodus. (Übergeben von handleQualifying)
+     */
     private fun handleMultiPlayer(player: Player): Player {
         var howManyPlayer = 0
         val playersList = mutableListOf<Player>()
@@ -224,6 +259,12 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
          return handleQualifying(playersList)
     }
 
+    /**
+     * Private Funktion zur Durchführung der Qualifikationsrunde des Spiels "Wer wird Millionär".
+     *
+     * @param playersList Eine Liste von Spielern, die an der Qualifikationsrunde teilnehmen.
+     * @return Der Gewinner der Qualifikationsrunde.
+     */
     private fun handleQualifying(playersList: MutableList<Player>): Player {
         var winner: Player? = null
         // Wir speichern uns das Playerobjekt, außerdem in einem Pair die Antworten und Antwortzeiten der Spieler
@@ -304,7 +345,16 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
         return winner
     }
 
-
+    /**
+     * Funktion, um das Spiel "Wer wird Millionär" zu starten.
+     *
+     * Zeigt das Spiellogo an, begrüßt den Spieler und startet die Hintergrundmusik.
+     * Ermöglicht die Auswahl zwischen Einzelspieler- und Mehrspielermodus.
+     * Zeigt die Spielregeln und bietet die Möglichkeit, das Spiel mit Risiko zu spielen.
+     * Startet dann die erste Frage.
+     *
+     * @param firstPlayer Der erste Spieler, welcher bei Programmstart angelegt wurde.
+     */
     fun startGame(firstPlayer: Player) {
         println("\n" +
                 "                                                                                                         \n" +
