@@ -1,65 +1,138 @@
-<h1 align="center">Grundlagen der Programmierung</h1>
-<h3 align="center">Abschlussaufgabe Quiz</h3>
+<h1 align="center">Spiele-Sammlung</h1>
+
+## Aktuell verfügbare Spiele:
+### 1. Wer wird Millionär
+> **Hinweis**: Die Spielregeln und Spielbeschreibung können auch im Spiel selbst zu Beginn aufgerufen werden.
+<details><summary>Spielbeschreibung</summary>
+
+> "Wer wird Millionär?" ist ein Quiz-Spiel, das auf der gleichnamigen Fernsehsendung basiert. Das Spiel besteht aus mehreren Runden, in denen die Spieler Fragen aus verschiedenen Wissensgebieten beantworten müssen, um einen Geldpreis zu gewinnen.   
 <br>
+"Wer wird Millionär?" ist ein unterhaltsames und herausforderndes Spiel, das Wissen und strategisches Denken erfordert, um den Hauptpreis zu gewinnen.
+</details>
 
-<p align="center">
-  <img src="img/img1.png" width="50%">
-</p>
+<details><summary>Spielregeln</summary>
 
-> **Hinweis**: Lies die Aufgabe aufmerksam. Versuche vor Beginn, die Aufgabe zu strukturieren. Notiere dir skizzenartig/in einem Klassendiagramm, was dein Programm braucht und setze deinen Plan Schritt für Schritt um.
+> **Spielmechanik**: Zu Beginn des Spiels wählt der Spieler zwischen dem Risikomdous oder dem normalen. Im Risikomodus fällt die Sicherheitsstufe bei 16.000€ weg, sodass der Spieler auf 500€ zurückfallen kann. Im Gegenzug dazu erhält er einen weiteren Joker. Pro richtig beantworteter Frage steigt der Geldbetrag. Das Ziel des Spiels ist es, durch das Beantworten einer Reihe von Fragen den Geldbetrag zu erhöhen und schließlich den Hauptpreis zu gewinnen.
+<br><br>
+**Fragen und Antworten**: Das Spiel besteht aus bis zu 15 Fragen, die in verschiedenen Schwierigkeitsgraden eingestuft sind. Jede Frage hat vier mögliche Antworten, von denen nur eine richtig ist. Der Spieler muss die richtige Antwort auswählen, um zur nächsten Frage zu gelangen. Dabei stehen ihm verschiedene Joker zur Verfügung.
+<br>**Pro Frage gilt ein Zeitlimit von 60 Sekunden!**
+<br><br>
+**Sicherheitsstufen**: Jeweils bei 500€ und bei 16.000€ gibt es Standardmäßig Sicherheitsstufen. Beantwortet ma eine Frage falsch, so fällt man maximal auf diese letzte Sicherheitsstufe zurück und gewinnt diesen Betrag trotzdem. Der Risikmodus stellt eine Ausnahme dar. Siehe Spielmechanik.
+<br><br>
+**Gewinnprogression**: Mit jeder richtig beantworteten Frage erhöht sich der Geldbetrag, den der Spieler gewinnt. Die Schwierigkeit der Fragen steigt ebenfalls mit zunehmendem Geldbetrag. Das Ziel des Spiels ist es, alle 15 Fragen richtig zu beantworten und den Hauptpreis von einer Millionen Euro zu gewinnen.
+<br><br>
+**Fehler und Spielende**: Wenn der Spieler eine Frage falsch beantwortet, kann er einen Teil seiner Gewinne verlieren. Der Spieler kann allerdings auch jederzeit aufhören und den bereits erspielten Betrag mitnehmen.
+</details> 
 
+<details><summary>Mehrspieler-Modus</summary>
 
-## 1. Szenario
+> Beim Mehrspielermodus können bis zu 5 Spieler antreten.  
+> Dabei erhalten alle Spieler nacheinander die gleiche Sortierfrage, der Spieler welche die schnellste und gleichzeitig richtige Antwort gegeben hat, ist dann für das Hauptspiel qualifiziert.  
+> Für den Fall, dass niemand die richtige Antwort hatte, wird die Qualifizierungsrunde wiederholt.
+</details>
+<details><Summary>Joker</Summary>
 
-Du bist neuerdings App-Developer und bekommst deinen ersten Auftrag: Du sollst das neue Videospiel „Golden Syntax“ mitentwickeln. Bei diesem Spiel handelt es sich um ein Quiz mit verschiedenen Fragen. Dieser Spiel kann auch mit mehreren Spielern gespielt werden. Die Spieler können die Fragen mithilfe von Jokern manipulieren. In deinem Developer-Team wird dir die Aufgabe zugeteilt, die **Spielelogik** zu entwickeln. Danach sollst du dem Team dein Spiel anhand eines Beispielquizes vorstellen.
+> **Folgende Joker gibt es im Spiel:**
+<br>
+> * **50/50 Joker**
+<br> Zwei falsche Antworten werden entfernt.<br><br>
+> * **Telefonjoker**
+<br> Der Spieler kann eine von drei Personen anrufen, welche einem hilft<br><br>
+> * **Publikumsjoker**
+<br> Das Publikum stimmt ab, der Spieler bekommt das Ergebnis für alle Optionen in Prozent angezeigt<br><br>
+> * **Zusatzjoker** (Nur im Riskomodus!)<br>
+> Der Spieler kann eine Person aus dem Publikum auswählen, die ihm hilft.
+<br><br>**Jeder Joker kann nur EINMAL pro Spiel genutzt werden!**
+</details>
+<details><summary>Befehle</summary>
 
+> **Folgende Befehle stehen während der Beantwort der Fragen zur Verfügung:**
+<br>
+> * **stop**
+<br>Du beendest das Spiel und gewinnst (natürlich virtuell) die bereits erspielte Geldsumme.
+<br><br>
+> * **joker**
+<br>Solltest du noch Joker haben, kannst du im angezeigten Menü deinen gewünschten Joker auswählen und so benutzen.
+</details>
 
-## 2. Details
+Für Nerds:
+<details><summary>Übersicht der Klassen</summary>
 
-Die Vorlage ist ein leeres Projekt in IntelliJ. Erstelle alle nötigen Dateien: Es gibt eine main.kt, in der das Spiel abläuft. Alle Klassen erhalten <span style="text-decoration:underline;">jeweils</span> eine eigene Datei. Funktionen kannst du <span style="text-decoration:underline;">zusammen</span> in eine Datei verlagern.
+**Einzelne Klassen**
+> * **Player**  
+> Diese Klasse repräsentiert die Spielerobjekte. Jeder Spieler hat einen Namen und ein Alter.<br><br>
+> * **Names**  
+> Diese Klasse repräsentiert eine Liste von Namen, zusätzlich beinhaltet sie die Funktion **generateRandomName** um sich einen zufälligen Namen aus dieser Liste zu holen.
 
+**Spielklassen**
+> * **Game** (Oberklasse)  
+> Diese Klasse repräsentiert die Oberklasse über die einzelnen Spiele. Sie legt fest, dass jede Spielklasse einen Spielenamen hat.
+<br><br>
+> * **WWM** (Erbt von Game)  
+> Diese Klasse repräsentiert das Spiel "Wer wird Millionär", daher ist deren Spielname auch per Standard so definiert. 
+<br><br>**Sie beinhaltet folgende Funktionen:**<br>
+<br> - **newQuestion** (Gibt basierend auf dem Fortschritt des Spiels eine einfache, mittlere oder schwere Frage zurück.)
+<br><br> - **gameRules** (Zeigt die Spielbeschreibung + Regeln an)
+<br><br> - **riskOrNot** (Der Spieler wählt zwischen Normalen Modus und Risikomodus)
+<br><br> - **nextQuestion** (Steuert den hauptsächlichen Spielfluss, ruft die benötigen Funktionen zum Anzeigen der nächsten Frage, zum einloggen der Antwort etc. auf. - Wertet auch aus, ob der Spieler richtig geantwortet hat.)
+<br><br> - **singleOrMultiPlayer** (Der Spieler wählt zwischen Einzel und Mehrspieler)
+<br><br> - **handleMultiPlayer** (Steuert den Spielfluss der Qualifizierungsrunde bei Mehrspieler)
+<br><br> - **startGame** (Startet das Spiel, gibt die Möglichkeit zum anzeigen der Spielregeln, außerdem ruft es die Funktion zum auswählen des Spielmodus auf, anschließend dann die Hauptfunktion für erste Frage.)
+<br><br>
+> * **Wordmix** (Erbt von Game)
+> Diese Klasse repräsentiert das Spiel "Wordmix", daher ist deren Spielname auch per Standard so definiert. Beinhaltet zusätzlich eine Liste aus Wörtern für das Spiel.
+<br><br>**Sie beinhaltet folgende Funktionen:**<br>
+<br> - **use** (Steuert den gesamten Spielfluss)
 
-### Informationen zu den Fragen:
+**Jokerklassen** 
+> * **Joker** (Oberklasse)  
+> Diese Klasse repräsentiert die Oberklasse über die einzelnen Spiele. Sie legt fest, dass jeder Joker einen Namen hat.
+<br><br>
+> * **FiftyFiftyJoker** (Erbt von Joker)  
+> Repräsentiert den 50/50 Joker
+<br><br>
+> * **Telefonjoker** (Erbt von Joker)  
+> Repräsentiert den Telefonjoker
+<br><br>
+> * **Publikumsjoker** (Erbt von Joker)  
+> Repräsentiert den Publikumsjoker
+<br><br>
+> * **Zusatzjoker** (Erbt von Joker)  
+> Repräsentiert den Zusatzjoker
+<br><br>
+> **Alle Joker besitzen die Funktion use(), damit werden die Joker und deren Funktionalität aufgerufen!**
 
-* Es soll mindestens 2 verschiedene Sorten von Fragen geben (Beispiele: Multiple-Choice Fragen, Textantwort Fragen, Wahr/Falsch,...).
-* Erstelle dafür eine Klasse _Frage_, diese implementiert die Logik, die alle Fragen gemeinsam haben. Von dieser Klasse erben dann die genauen Fragetypen.
-* Für die Demo-Version des Quizes sollen ca 30 Fragen existieren. Diese Fragen kommen aus verschiedenen Themenbereichen (z.B. Geographie, Biologie, Geschichte, ...)
+**Fragenklassen**
+> * **Question** (Oberklasse)  
+> Diese Klasse repräsentiert die Oberklasse für die verschiedenen Fragenarten. Sie legt fest, dass jede Fragenklasse eine Frage und eine Schwierigkeitsstufe braucht. Außerdem enthält sie die Liste der Fragen.
+<br><br>
+> * **MultipleChoiceQuestion** (Erbt von Question)  
+> Repräsentiert die MultipleChoiceQuestions für "Wer wird Millionär". Jede Frage hat vier vorgegebene Antwortmöglichkeiten, wovon nur eine richtig ist.
+<br><br>**Sie beinhaltet folgende Funktionen:**<br>
+<br> - **getQuestion** (Zeigt die aktuelle Frage an)  
+<br> - **getQuestionLoggedIn** (Gibt die Frage noch mal mit markierter Wahl des Spielers aus)  
+<br> - **getAnswer** (Gibt die Frage samt Lösung durch farbliche Markierungen aus)  
+<br> - **chooseSolution** (Gibt dem Spieler die Möglichkeit eine Antwort auswählen, alternativ das Spiel zu beenden oder einen Joker zu nutzen)
+<br><br>
+> * **SortingQuestion** (Erbt von Question)  
+> Diese Klasse repräsentiert die Sortierfragen für "Wer wird Millionär" im Mehrspielermodus während der Qualifizierung.
+<br><br>**Sie beinhaltet folgende Funktionen:**<br>
+<br> - **getNewQuestion** (Gibt eine zufällige Sortierfrage zurück)
+</details>
 
-### Informationen zum Spieler:
+### 2. Wordmix
 
-* Es gibt eine Klasse _Spieler_. Diese Klasse speichert für jeden Spieler den Namen, das Alter, den aktuellen Punkte-/Kontostand, und eine Liste von Jokern. Du kannst nach belieben weitere Eigenschaften hinzufügen.
-* Um am Quiz teilnehmen zu können, muss ein Spieler mindestens 12 Jahre alt sein.
-* Im Quiz können mehrere Spieler gegeneinander antreten.
+<details><summary>Spielbeschreibung</summary>
 
+> Bei Wordmix wurden alle Buchstaben eines Wortes in eine zufällige Reihenfolge gebracht. Deine Aufgabe ist es, das richtige Wort zu erraten.
+</details>
+<details><summary>Befehle</summary>
 
-### Informationen zu den Jokern:
-* Es gibt mindestens 2 Arten von Jokern, einige Ideen dafür:
-  * 50:50 jokerclasses.Joker, eliminiert falsche Antworten
-  * ein jokerclasses.Joker, der die richtige Antwort farbig markiert
-  * ein jokerclasses.Joker, der die aktuelle Frage an einem anderen Spieler abgibt
-  * ein jokerclasses.Joker, der eine Frage überspringen lässt um eine neue Frage zu erhalten
-  * ...
-* Jeder jokerclasses.Joker kann nur einmal verwendet werden. Alternativ kannst du hier aber auch ein anderes System entwickeln.
-* Beim Quizstart erhält jeder Spieler die selbe Anzahl an Jokern
-
-### Informationen zum Quiz
-* Bei Spielstart, wird gefragt, wie viele Spieler teilnehmen möchten. Die entsprechende Anzahl an Spielern wird dann nach ihrem Namen und Alter gefragt und entsprechend initialisiert.
-* Das Spiel läuft in Runden ab. Wie genau die Runden in dem Quiz definiert sind, ist dir überlassen, aber einige Ideen:
-  * eine Frage pro Spieler
-  * jede Kategorie ist eine eigene Runde
-  * eine Runde dauert bis ein Spieler x Fragen richtig beantwortet
-  * ...
-* Das Quiz hat ein klar definiertes Ende implementiert. Du kannst dich für die genaue Regel selbst entscheiden. Einige Ideen:
-  * Es wird eine feste Anzahl Runden gespielt
-  * Sobald ein Spieler x Fragen/Runden gewonnen hat, bzw. eine gewisse Punktzahl erreicht hat, endet das Spiel
-  * Jeder Spieler startet mit einer Anzahl an Leben. Bei einer falsch beantworteten Frage, verliert man eins der Leben. Das Quiz endet, sobald nur 1 Spieler übrig ist.
-
-## 3. Optionale, freiwillige Ergänzungen und Anmerkungen
-
-Selbstverständlich darfst du dein Spiel mit deinen eigenen Ideen weiter ausschmücken.  \
-Einige Ideen zur Erweiterung:
-
-
-* Du könntest Teams von Spielern gemeinsam spielen lassen. Überlege dir selbst, wie du die Regeln dafür anpassen müsstest. 
-* Weitere jokerclasses.Joker oder Fragentypen sind immer gerne gesehen.
-* ...
+> **Folgende Befehle stehen während der Beantwortung der Fragen zur Verfügung:**
+<br>
+> * **next**
+    <br>Du bekommst ein neues durchgemixtes Wort.
+    <br><br>
+> * **stop**
+    <br>Du beendest Wordmix und wir bringen dich zurück ins Hauptmenü.
+</details>
