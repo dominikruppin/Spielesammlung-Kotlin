@@ -127,7 +127,7 @@ class MultipleChoiceQuestion(
                     "joker" -> {
                         if (wwm.joker.size < 1) {
                             println("Du hast keine Joker mehr.")
-                            continue
+                            return chooseSolution(player, wwm, question)
                         } else {
                             // getJoker returned einen Boolean. Bei true fand die Auswertung schon statt, bei false nicht
                             if (Joker().getJoker(player, wwm, question)) {
