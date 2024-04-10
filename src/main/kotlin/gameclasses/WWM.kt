@@ -155,7 +155,6 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
             var answer = question.chooseSolution(player, this, question)
             // Beim negativen Wert wurde der 50/50 Joker genutzt und es fand bereits eine Auswertung statt
             if (answer == -1) {
-                println("\nDeine Antwort war richtig! Glückwunsch!")
                 Thread.sleep(3000)
                 println("\nKommen wir zur nächsten Frage.\n")
                 Thread.sleep(6000)

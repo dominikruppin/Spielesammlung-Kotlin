@@ -104,13 +104,21 @@ class FiftyFiftyJoker(name: String = "50/50"): Joker(name) {
                  println("$char) $option")
              }
          }
+
         if (question.answer == chooseIndex) {
+            println("Deine Antwort war richtig! Glückwunsch!")
             if (wwm.round == 14) {
                 println("!!!!!!!DU BIST MILLIONÄR!!!!!")
                 Thread.sleep(5000)
                 hauptMenue(player)
                 return
             }
+        } else {
+            println("Deine Antwort war leider falsch. Es wäre ${'a' + question.answer} gewesen.")
+            Thread.sleep(3000)
+            println("Wir bringen dich nun zurück ins Hauptmenü.")
+            Thread.sleep(3000)
+            hauptMenue(player)
         }
      }
 }
