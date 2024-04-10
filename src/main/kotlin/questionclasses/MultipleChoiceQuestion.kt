@@ -86,7 +86,7 @@ class MultipleChoiceQuestion(
      * @return Die Indexnummer der ausgewählten Antwort oder -1, wenn ein Joker verwendet wurde oder das Spiel beendet wurde.
      */
 
-fun chooseSolution(player: Player, wwm: WWM, question: MultipleChoiceQuestion): Int {
+    fun chooseSolution(player: Player, wwm: WWM, question: MultipleChoiceQuestion): Int {
         var answer = 0
         var userInput: String? = null
 
@@ -102,57 +102,91 @@ fun chooseSolution(player: Player, wwm: WWM, question: MultipleChoiceQuestion): 
             println("Du hast innerhalb der Zeit keine Antwort gegeben, das Spiel ist vorbei.")
             exitProcess(0)
         } else { // Benutzereingabe innerhalb des Zeitlimits erhalten
-            when (userInput) {
-                "a" -> answer = 0
-                "b" -> answer = 1
-                "c" -> answer = 2
-                "d" -> answer = 3
-                "joker" -> {
-                    if (wwm.joker.size < 1) {
-                        println("Du hast keine Joker mehr.")
-                    } else {
-                        // getJoker returned einen Boolean. Bei true fand die Auswertung schon statt, bei false nicht
-                        if (Joker().getJoker(player, wwm, question)) {
-                            // Wenn die Auswertung schon war (true), dann returnen wir -1, damit wir das wissen
-                            return -1
+            while (true) {
+                when (userInput) {
+                    "a" -> {
+                        answer = 0
+                        break
+                    }
+
+                    "b" -> {
+                        answer = 1
+                        break
+                    }
+
+                    "c" -> {
+                        answer = 2
+                        break
+                    }
+
+                    "d" -> {
+                        answer = 3
+                        break
+                    }
+
+                    "joker" -> {
+                        if (wwm.joker.size < 1) {
+                            println("Du hast keine Joker mehr.")
+                            continue
+                        } else {
+                            // getJoker returned einen Boolean. Bei true fand die Auswertung schon statt, bei false nicht
+                            if (Joker().getJoker(player, wwm, question)) {
+                                // Wenn die Auswertung schon war (true), dann returnen wir -1, damit wir das wissen
+                                return -1
+                            } else {
+                                return chooseSolution(player, wwm, question)
+                            }
                         }
                     }
-                }
 
-                "stop" -> {
-                    println("Möchtest du wirklich aufhören und die %,d€ mitnehmen?".format(level[wwm.round - 1]))
-                    if (wwm.joker.size > 0) {
-                        println("Denk daran, du besitzt noch folgende Joker: ${wwm.joker}")
-                    }
-                    while (true) {
-                        println("1) Ja\n2) Nein")
-                        when (readln().lowercase()) {
-                            "1", "ja" -> {
-                                println("Weise Entscheidung, ich gratuliere dir zu den gewonnenen %,d€!".format(level[wwm.round - 1]))
-                                Thread.sleep(2000)
-                                println("Es geht gleich zurück ins Hauptmenü.")
-                                Thread.sleep(8000)
-                                hauptMenue(player)
-                                return answer
+                    "stop" -> {
+                        if (wwm.round == 0) {
+                            println("Wenn du jetzt aufhörst, gehst du leer aus.")
+                        } else {
+                            println("Möchtest du wirklich aufhören und die %,d€ mitnehmen?".format(level[wwm.round]))
+                        }
+                        if (wwm.joker.size > 0) {
+                            println("Denk daran, du besitzt noch folgende Joker: ${wwm.joker.joinToString { joker -> joker.name }}")
+                        }
+                        while (true) {
+                            println("1) Ja\n2) Nein")
+                            when (readln().lowercase()) {
+                                "1", "ja" -> {
+                                    if (wwm.round == 0) {
+                                        println("Okay, wir beenden das Spiel... Du gehst leider leer aus.")
+                                    } else {
+                                        println("Weise Entscheidung, ich gratuliere dir zu den gewonnenen %,d€!".format(level[wwm.round]))
+                                    }
+                                    Thread.sleep(2000)
+                                    println("Es geht gleich zurück ins Hauptmenü.")
+                                    Thread.sleep(8000)
+                                    hauptMenue(player)
+                                    return answer
+                                }
+
+                                "2", "nein" -> {
+                                    println("Ein Zocker wie ich sehe... machen wir weiter!")
+                                    question.getQuestion(player, wwm)
+                                    return chooseSolution(player, wwm, question)
+                                }
+
+                                else -> println("Ungültige Eingabe, versuche es erneut:")
                             }
-
-                            "2", "nein" -> {
-                                println("Ein Zocker wie ich sehe... machen wir weiter!")
-                                println("Bitte gib deine Antwort zur bereits gestellten Frage ein:")
-                                return answer
-                            }
-
-                            else -> println("Ungültige Eingabe, versuche es erneut:")
                         }
                     }
-                }
 
-                else -> println("Ungültige Eingabe, probiere es erneut:")
+                    else -> {
+                        println("Ungültige Eingabe, probiere es erneut:")
+                        userInput = readln().lowercase()
+                        continue
+                    }
+                }
             }
         }
         return answer
     }
 }
+
 
 // Multiple Choice Questions:
 // Die Fragen wurden aus dem Internet kopiert.

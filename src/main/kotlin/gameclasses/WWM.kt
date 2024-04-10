@@ -155,6 +155,10 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
             var answer = question.chooseSolution(player, this, question)
             // Beim negativen Wert wurde der 50/50 Joker genutzt und es fand bereits eine Auswertung statt
             if (answer == -1) {
+                println("\nDeine Antwort war richtig! Glückwunsch!")
+                Thread.sleep(3000)
+                println("\nKommen wir zur nächsten Frage.\n")
+                Thread.sleep(6000)
                 this.round++
                 // Da die Auswertung bereits war, überspringen wir die weitere Auswertung und beginnen mit der nächsten Frage.
                 continue
@@ -270,7 +274,7 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
         // Wir speichern uns das Playerobjekt, außerdem in einem Pair die Antworten und Antwortzeiten der Spieler
         val playerAnswers = mutableMapOf<Player, Pair<String, Long>>()
         // Wir holen uns eine neue zufällige Sortierfrage
-        val question = SortingQuestion.getNewQuestion()
+        var question = SortingQuestion.getNewQuestion()
         do {
             Thread.sleep(5000)
             println("\nNach der Reihe müssen nun alle Spieler die gleiche Frage beantworten.")
@@ -296,7 +300,7 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
                     println("$char) $option")
                 }
                 println("\nGib nun deine Antwort ein:")
-                println(question.answer) // NUR FÜR DEBUGGING
+                println(question.answer) // NUR FÜR DEBUGGING!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // Wir speichern den aktuellen Zeitpunkt, ab dem der Spieler seine Antwort abgeben kann
                 var startTimestamp = System.currentTimeMillis()
                 // Wir holen uns die Antwort im Spieler
@@ -331,14 +335,21 @@ class WWM(name: String = "Wer wird Millionär"): Game(name) {
                 println("${mark}Spieler: ${player.name}, Antwort: $answer, Zeit: $formattedTime \u001B[0m")
             }
 
-            // HIER NOCH KORREKT DOKUMENTIEREN
             println()
+            // Wir holen uns den schnellsten Spieler mit der richtigen Antwort
+            // Dafür itieren wir über die Map playerAnswers. it ist in dem Fall das jeweilige Entry. Key ist dabei das Spielerobjekt
+            // value.first ist die abgegebene Antwort und value.scond die benötigte Zeit
+            // Wenn also die Antwort richtig ist und es die niedrigste Zeit ist, speichern wir diesen Entry ab
             val fastestCorrectAnswer = playerAnswers.filter { it.value.first == question.answer }.minByOrNull { it.value.second }
+            // Wenn die Liste nicht leer ist, gibt es einen Gewinner
             if (fastestCorrectAnswer != null) {
                 println("Spieler ${fastestCorrectAnswer.key.name} hat mit einer Zeit von ${formatMiliseconds(fastestCorrectAnswer.value.second)} Millisekunden und der korrekten Antwort gewonnen!")
+                // key = Spielerobjekt
                 winner = fastestCorrectAnswer.key
             } else {
                 println("Kein Spieler hat mit einer korrekten Antwort und der niedrigsten Zeit gewonnen. Die Qualifizierungsrunde wird erneut durchgeführt.")
+                // Neue Frage holen
+                question = SortingQuestion.getNewQuestion()
             }
         } while (winner == null)
 

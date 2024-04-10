@@ -44,7 +44,7 @@ open class Joker(val name: String = "Joker") {
         when (wwm.joker[input!! - 1]) {
             is FiftyFiftyJoker -> {
                 val fiftyFiftyJoker = wwm.joker[input - 1] as FiftyFiftyJoker
-                fiftyFiftyJoker.use(question)
+                fiftyFiftyJoker.use(question, player, wwm)
                 wwm.joker.remove(fiftyFiftyJoker)
                 return true
             }
@@ -52,16 +52,19 @@ open class Joker(val name: String = "Joker") {
                 val telefonjoker = wwm.joker[input -1] as Telefonjoker
                 telefonjoker.use(wwm, player, question)
                 wwm.joker.remove(telefonjoker)
+                return false
             }
             is Publikumsjoker -> {
                 val publikumsjoker = wwm.joker[input -1] as Publikumsjoker
                 publikumsjoker.use(player, wwm, question)
                 wwm.joker.remove(publikumsjoker)
+                return false
             }
             is Zusatzjoker -> {
                 val zusatzjoker = wwm.joker[input -1] as Zusatzjoker
                 zusatzjoker.use(wwm, player, question)
                 wwm.joker.remove(zusatzjoker)
+                return false
             }
         }
         return false

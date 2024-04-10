@@ -1,5 +1,8 @@
 package jokerclasses
 
+import classes.Player
+import gameclasses.WWM
+import hauptMenue
 import questionclasses.MultipleChoiceQuestion
 
 /**
@@ -14,7 +17,7 @@ class FiftyFiftyJoker(name: String = "50/50"): Joker(name) {
      *
      * @param question Die MultipleChoiceQuestion, für die der Joker angewendet wird.
      */
-    fun use(question: MultipleChoiceQuestion) {
+    fun use(question: MultipleChoiceQuestion, player: Player, wwm: WWM) {
         println("Du hast den 50/50 Joker ausgewählt.\nWir entfernen nun zwei falsche Antworten...")
          // Wir erstellen mit falseAnswers eine neue Liste mit den Indexen von falschen Antworten.
          // Dazu nutzen wir den Index (0 until question.options.size)
@@ -101,5 +104,13 @@ class FiftyFiftyJoker(name: String = "50/50"): Joker(name) {
                  println("$char) $option")
              }
          }
+        if (question.answer == chooseIndex) {
+            if (wwm.round == 14) {
+                println("!!!!!!!DU BIST MILLIONÄR!!!!!")
+                Thread.sleep(5000)
+                hauptMenue(player)
+                return
+            }
+        }
      }
 }

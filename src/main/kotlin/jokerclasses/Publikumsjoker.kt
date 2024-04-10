@@ -40,7 +40,6 @@ class Publikumsjoker(name: String = "Publikumsjoker"): Joker(name) {
         Thread.sleep(6000)
         println("Hier zur Übersicht noch einmal die Frage:")
         question.getQuestion(player, wwm)
-        println("Bitte gib nun deine Antwort ein:")
     }
 
     /**
